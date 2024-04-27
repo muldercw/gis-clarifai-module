@@ -27,7 +27,8 @@ html_code = """
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
-    #mapid { height: 100vh; }
+    html, body { height: 100%; margin: 0; }
+    #mapid { height: 100%; }
   </style>
 </head>
 <body>
@@ -61,4 +62,3 @@ html_code = """
 """
 
 st.components.v1.html(html_code)
-
