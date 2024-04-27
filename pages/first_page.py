@@ -6,13 +6,13 @@ from clarifai.client.user import User
 from clarifai.modules.css import ClarifaiStreamlitCSS
 from google.protobuf import json_format, timestamp_pb2
 
-st.set_page_config(layout="wide")
-ClarifaiStreamlitCSS.insert_default_css(st)
+#st.set_page_config(layout="wide")
+# ClarifaiStreamlitCSS.insert_default_css(st)
 
-# This must be within the display() function.
-auth = ClarifaiAuthHelper.from_streamlit(st)
-stub = create_stub(auth)
-userDataObject = auth.get_user_app_id_proto()
+# # This must be within the display() function.
+# auth = ClarifaiAuthHelper.from_streamlit(st)
+# stub = create_stub(auth)
+# userDataObject = auth.get_user_app_id_proto()
 
 st.title("Mulder's Map")
 
@@ -26,21 +26,27 @@ html_code = """
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
-    html, body { height: 100%; margin: 0; }
-    #mapid { height: 100vh; }
-    .fixed-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
+    html,body {
         height: 100%;
-        background-color: rgba(255, 255, 255, 0.5); /* Adjust the opacity as needed */
-        z-index: 9999; /* Adjust the z-index to make sure it overlays other elements */
-    }
+        overflow: hidden;
+        background-color: #000000;
+        padding-top:0px;
+        padding-bottom:0px;
+        padding-left:0px;
+        padding-right:0px;
+        margin: 0 0 0 0;
+     }
+     #mapid {
+        height: 100%;
+        width: 100%;
+        padding-top:0px;
+        padding-bottom:0px;
+    
+     }
   </style>
 </head>
 <body>
-  <div class="fixed-overlay"></div> <!-- Add a fixed overlay to block interaction with elements below -->
+
   <div id="mapid"></div>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
@@ -49,7 +55,7 @@ html_code = """
     // Add base layers
     var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
+    }).addTo(mymap);
     var cartoLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://carto.com/">Carto</a>'
     });
@@ -68,7 +74,8 @@ html_code = """
   </script>
 </body>
 </html>
+
 """
 
 # Write the HTML code to the app
-st.components.v1.html(html_code)
+st.components.v1.html(html_code, height=500)
