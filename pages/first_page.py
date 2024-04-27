@@ -17,6 +17,7 @@ userDataObject = auth.get_user_app_id_proto()
 st.title("Mulder's Map")
 
 
+
 # Embedding Leaflet map using HTML component
 html_code = """
 <!DOCTYPE html>
@@ -27,8 +28,7 @@ html_code = """
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
-    html, body { height: 100%; margin: 0; }
-    #mapid { height: 100%; }
+    html, body, #mapid { width: 100%; height: 100%; margin: 0; }
   </style>
 </head>
 <body>
@@ -40,7 +40,7 @@ html_code = """
     // Add base layers
     var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
+    }).addTo(mymap);
     var cartoLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://carto.com/">Carto</a>'
     });
@@ -61,4 +61,5 @@ html_code = """
 </html>
 """
 
-st.components.v1.html(html_code)
+# Write the HTML code to the app
+st.write(html_code, unsafe_allow_html=True)
