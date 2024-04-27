@@ -16,8 +16,6 @@ userDataObject = auth.get_user_app_id_proto()
 
 st.title("Mulder's Map")
 
-
-
 # Embedding Leaflet map using HTML component
 html_code = """
 <!DOCTYPE html>
@@ -28,10 +26,21 @@ html_code = """
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
-    html, body, #mapid { width: 100%; height: 100%; margin: 0; }
+    html, body { height: 100%; margin: 0; }
+    #mapid { height: 100vh; }
+    .fixed-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.5); /* Adjust the opacity as needed */
+        z-index: 9999; /* Adjust the z-index to make sure it overlays other elements */
+    }
   </style>
 </head>
 <body>
+  <div class="fixed-overlay"></div> <!-- Add a fixed overlay to block interaction with elements below -->
   <div id="mapid"></div>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
@@ -40,7 +49,7 @@ html_code = """
     // Add base layers
     var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(mymap);
+    });
     var cartoLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://carto.com/">Carto</a>'
     });
@@ -62,4 +71,4 @@ html_code = """
 """
 
 # Write the HTML code to the app
-st.write(html_code, unsafe_allow_html=True)
+st.components.v1.html(html_code)
