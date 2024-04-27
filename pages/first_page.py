@@ -14,7 +14,8 @@ auth = ClarifaiAuthHelper.from_streamlit(st)
 stub = create_stub(auth)
 userDataObject = auth.get_user_app_id_proto()
 
-st.title("Simple example to list inputs")
+st.title("Mulder's Map")
+
 
 # Embedding Leaflet map using HTML component
 html_code = """
@@ -34,9 +35,23 @@ html_code = """
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
     var mymap = L.map('mapid').setView([51.505, -0.09], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    
+    // Add base layers
+    var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(mymap);
+    });
+    var cartoLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://carto.com/">Carto</a>'
+    });
+
+    // Add layer control
+    var baseLayers = {
+      "OpenStreetMap": osmLayer,
+      "Carto": cartoLayer,
+    };
+    L.control.layers(baseLayers).addTo(mymap);
+    
+    // Add marker
     L.marker([51.5, -0.09]).addTo(mymap)
       .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
       .openPopup();
@@ -44,4 +59,6 @@ html_code = """
 </body>
 </html>
 """
+
 st.components.v1.html(html_code)
+
