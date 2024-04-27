@@ -16,54 +16,32 @@ userDataObject = auth.get_user_app_id_proto()
 
 st.title("Simple example to list inputs")
 
-with st.form(key="data-inputs"):
-    mtotal = st.number_input(
-        "Select number of inputs to view in a table:", min_value=5, max_value=100)
-    submitted = st.form_submit_button('Submit')
-
-if submitted:
-    if mtotal is None or mtotal == 0:
-        st.warning("Number of inputs must be provided.")
-        st.stop()
-    else:
-        st.write("Number of inputs in table will be: {}".format(mtotal))
-
-        # Stream inputs from the app. list_inputs give list of dictionaries with inputs and its metadata .
-        input_obj = User(user_id=userDataObject.user_id).app(app_id=userDataObject.app_id).inputs()
-        all_inputs = input_obj.list_inputs()
-
-        #Check for no of inputs in the app and compare it with no of inputs to be displayed.
-        if len(all_inputs) < (mtotal):
-            raise Exception(
-                f"No of inputs is less than {mtotal}. Please add more inputs or reduce the inputs to be displayed !"
-            )
-
-        else:
-            data = []
-            #added "data_url" which gives the url of the input.
-            for inp in range(mtotal):
-                data.append({
-                    "id": all_inputs[inp].id,
-                    "data_url": all_inputs[inp].data.image.url,
-                    "status": all_inputs[inp].status.description,
-                    "created_at": timestamp_pb2.Timestamp.ToDatetime(all_inputs[inp].created_at),
-                    "modified_at": timestamp_pb2.Timestamp.ToDatetime(all_inputs[inp].modified_at),
-                    "metadata": json_format.MessageToDict(all_inputs[inp].data.metadata),
-                })
-
-            st.dataframe(data)
-
-            # Embedding Leaflet map using HTML component
-            html_code = """
-            <div id="mapid" style="height: 400px;"></div>
-            <script>
-                var mymap = L.map('mapid').setView([51.505, -0.09], 13);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(mymap);
-                L.marker([51.5, -0.09]).addTo(mymap)
-                    .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-                    .openPopup();
-            </script>
-            """
-            st.components.v1.html(html_code)
+# Embedding Leaflet map using HTML component
+html_code = """
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Leaflet Map</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #mapid { height: 100vh; }
+  </style>
+</head>
+<body>
+  <div id="mapid"></div>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(mymap);
+    L.marker([51.5, -0.09]).addTo(mymap)
+      .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+      .openPopup();
+  </script>
+</body>
+</html>
+"""
+st.components.v1.html(html_code)
