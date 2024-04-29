@@ -16,6 +16,7 @@ st.set_page_config(page_title="Mulder's Map",
                               'Report a bug': "https://www.extremelycoolapp.com/bug",
                               'About': "# This is a header. This is an *extremely* cool app!"
                   })
+
 ClarifaiStreamlitCSS.insert_default_css(st)
 
 # # This must be within the display() function.
@@ -357,6 +358,20 @@ html_code = """
 </html>
 
 """
-
 # Write the HTML code to the app
-st.components.v1.html(html_code, height=500)
+component_height = 600  # Default height
+st.components.v1.html(html_code, height=component_height)
+
+# JavaScript to set the height dynamically
+javascript_code = """
+<script>
+  // Get the parent element of the HTML component
+  var parentElement = document.getElementsByClassName("stApp")[0];
+  // Set the height of the HTML component to match its parent
+  var component = parentElement.getElementsByClassName("stComponent")[0];
+  component.style.height = parentElement.clientHeight + "px";
+</script>
+"""
+
+# Write the JavaScript code to the app
+st.components.v1.html(javascript_code)
