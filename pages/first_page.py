@@ -370,6 +370,7 @@ javascript_code = """
   // Set the height of the HTML component to match its parent
   var component = parentElement.getElementsByClassName("stComponent")[0];
   component.style.height = parentElement.clientHeight + "px";
+  console.log("Parent height: " + parentElement.clientHeight);
 </script>
 """
 
